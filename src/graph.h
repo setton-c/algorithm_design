@@ -10,45 +10,12 @@
 class disjoint_set {
 public:
     disjoint_set() {}
-
-    void print_set() {
-        for (size_t i = 0; i < sets.size(); i++) {
-            std::cout << i << ": ";
-            for (const char el : sets[i]) {
-                std::cout << el << " ";
-            }
-            std::cout << '\n';
-        }
-    }
-
+    void print_set();
     void
     make_set(const std::unordered_map<char, std::list<std::pair<char, int>>>&
-                 adjacency_list) {
-        for (const auto& el : adjacency_list) {
-            sets.push_back({el.first});
-        }
-    }
-
-    int find_set(const char vertex) {
-        for (size_t i = 0; i < sets.size(); i++) {
-            if (sets[i].find(vertex) != sets[i].end()) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    void merge_set(const int set1, const int set2) {
-        sets[set1].merge(sets[set2]);
-        // for (char el : sets[set2]) {
-        //     sets[set1].insert(el);
-        // }
-        print_set();
-        std::cout << '\n';
-        sets.erase(sets.begin() + set2);
-    }
-
+                 adjacency_list);
+    int find_set(const char vertex);
+    void merge_set(const int set1, const int set2); 
 private:
     std::vector<std::unordered_set<char>> sets;
 };
