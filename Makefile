@@ -9,7 +9,7 @@ CXXFLAGS = -std=c++20 -Wall
 TARGET = graph
 
 # Source files
-SRCS = weighted_graph.cpp unweighted_graph.cpp main.cpp
+SRCS = src/weighted_graph.cpp src/unweighted_graph.cpp main.cpp
 
 # Object files
 OBJS = $(SRCS:.cpp=.o)
@@ -21,10 +21,10 @@ $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(TARGET)
 
 # Compile unweighted_graph.cpp before main.cpp
-weighted_graph.o: weighted_graph.cpp
+weighted_graph.o: src/weighted_graph.cpp
 	$(CXX) $(CXXFLAGS) -g -c $< -o $@
 
-unweighted_graph.o: unweighted_graph.cpp
+unweighted_graph.o: src/unweighted_graph.cpp
 	$(CXX) $(CXXFLAGS) -g -c $< -o $@
 
 main.o: main.cpp

@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "src/graph.h"
 
 int main() {
     weighted_graph g(false); 
