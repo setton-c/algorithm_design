@@ -15,7 +15,8 @@ public:
     make_set(const std::unordered_map<char, std::list<std::pair<char, int>>>&
                  adjacency_list);
     int find_set(const char vertex);
-    void merge_set(const int set1, const int set2); 
+    void merge_set(const int set1, const int set2);
+
 private:
     std::vector<std::unordered_set<char>> sets;
 };

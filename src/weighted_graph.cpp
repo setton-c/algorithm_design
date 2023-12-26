@@ -1,5 +1,6 @@
 #include "graph.h"
 #include <algorithm>
+#include <queue>
 #include <cstdio>
 #include <iostream>
 
@@ -50,6 +51,10 @@ void weighted_graph::kruskal() {
                       << '\n';
         }
     }
+}
+
+void weighted_graph::prim(const char start) {
+    
 }
 
 void weighted_graph::print_graph() {
