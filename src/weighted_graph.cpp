@@ -1,8 +1,8 @@
 #include "graph.h"
 #include <algorithm>
-#include <queue>
 #include <cstdio>
 #include <iostream>
+#include <queue>
 
 weighted_graph::weighted_graph(const bool directed) : is_directed(directed) {}
 
@@ -31,7 +31,6 @@ void weighted_graph::kruskal() {
             return a.second.second < b.second.second;
         }
     );
-
     this->print_all_edge();
 
     disjoint_set forest;
@@ -54,7 +53,46 @@ void weighted_graph::kruskal() {
 }
 
 void weighted_graph::prim(const char start) {
-    
+    // Clear the vector from potential
+    // remainders from previous operations
+    visited.clear();
+
+    // Initialize the priority_queue in a way where
+    // it Prioritizes edges with smallest weights
+    std::priority_queue<
+        std::pair<int, std::pair<char, char>>,
+        std::vector<std::pair<int, std::pair<char, char>>>,
+        std::greater<std::pair<int, std::pair<char, char>>>>
+        pq;
+    // Mark the starting node as visited
+    visited.insert(start);
+    // store all the neighbours of our starting node in the pq
+    for (const auto& edge : adjacency_list[start]) {
+        pq.push({edge.second, {start, edge.first}});
+    };
+
+    // Repeat for all edges
+    while (!pq.empty() && visited.size() < vert_count) {
+        std::pair<int, std::pair<char, char>> min_edge = pq.top();
+        pq.pop();
+
+        char src = min_edge.second.first;
+        char dest = min_edge.second.second;
+        int weight = min_edge.first;
+
+        // if the node is already visited we skip it
+        if (visited.find(dest) != visited.end()) {
+            continue;
+        }
+        // if not we mark it as visited
+        visited.insert(dest);
+        // add it to the MST
+        std::cout << src << " to " << dest << " weight: " << weight << '\n';
+        // and push all its neighbours to the pq
+        for (const auto& edge : adjacency_list[dest]) {
+            pq.push({edge.second, {dest, edge.first}});
+        }
+    }
 }
 
 void weighted_graph::print_graph() {

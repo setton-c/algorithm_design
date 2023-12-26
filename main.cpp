@@ -27,7 +27,8 @@ int main() {
     g.add_edge('e', 'f', 3);
 
     g.print_graph();
-    g.kruskal();
+    // g.kruskal();
+    g.prim('a');
     // g.print_all_edge();
     // g.print_graph();
 }

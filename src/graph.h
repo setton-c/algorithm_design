@@ -32,7 +32,7 @@ public:
 private:
     std::unordered_map<char, std::list<char>> adjacency_list;
     std::unordered_set<char> visited;
-    int vert_count;
+    size_t vert_count;
     bool is_directed;
 };
 
@@ -49,8 +49,8 @@ public:
 private:
     std::unordered_map<char, std::list<std::pair<char, int>>> adjacency_list;
     std::vector<std::pair<char, std::pair<char, int>>> all_edges;
-    // std::unordered_set<char> visited;
-    int vert_count;
+    std::unordered_set<char> visited;
+    size_t vert_count;
     bool is_directed;
 };
 
