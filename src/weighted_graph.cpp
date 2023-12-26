@@ -95,6 +95,49 @@ void weighted_graph::prim(const char start) {
     }
 }
 
+void weighted_graph::dijkstra(const char start) {
+    visited.clear();
+    std::unordered_map<char, int> distance;
+    distance[start] = 0;
+
+    std::priority_queue<
+        std::pair<int, char>,
+        std::vector<std::pair<int, char>>,
+        std::greater<std::pair<int, char>>>
+        pq;
+    pq.push({0, start});
+
+    while (!pq.empty() && visited.size() < vert_count) {
+        std::pair<int, char> current = pq.top();
+        pq.pop();
+
+        char current_vert = current.second;
+        int current_distance = current.first;
+
+        if (visited.find(current_vert) != visited.end()) {
+            continue;
+        }
+
+        visited.insert(current_vert);
+
+        for (const auto& edge : adjacency_list[current_vert]) {
+            char neighbour = edge.first;
+            int neighbour_distance = edge.second;
+            int new_distance = current_distance + neighbour_distance;
+
+            if (distance.find(neighbour) == distance.end() ||
+                new_distance < distance[neighbour]) {
+                distance[neighbour] = new_distance;
+                pq.push({new_distance, neighbour});
+            }
+        }
+    }
+    std::cout << "From: " << start << '\n';
+    for(const auto& edge : distance) {
+        std::cout << edge.first << ": " << edge.second << '\n';
+    }
+}
+
 void weighted_graph::print_graph() {
     for (const auto& el : adjacency_list) {
         std::cout << el.first << ": ";

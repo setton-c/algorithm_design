@@ -42,6 +42,7 @@ public:
     void add_edge(const char src, const char dest, const int weight);
     void kruskal();
     void prim(const char start);
+    void dijkstra(const char start);
     void bellman_ford(const char start);
     void print_graph();
     void print_all_edge();

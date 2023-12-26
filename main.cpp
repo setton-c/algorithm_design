@@ -21,7 +21,7 @@ int main() {
     g.add_edge('a', 'c', 4);
     g.add_edge('b', 'c', 2);
     g.add_edge('c', 'd', 3);
-    g.add_edge('c', 'f', 4);
+    g.add_edge('c', 'f', 6);
     g.add_edge('c', 'e', 2);
     g.add_edge('d', 'f', 3);
     g.add_edge('e', 'f', 3);
@@ -29,6 +29,7 @@ int main() {
     g.print_graph();
     // g.kruskal();
     g.prim('a');
+    g.dijkstra('a');
     // g.print_all_edge();
     // g.print_graph();
 }
