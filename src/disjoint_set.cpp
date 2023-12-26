@@ -31,7 +31,7 @@ int disjoint_set::find_set(const char vertex) {
 
 void disjoint_set::merge_set(const int set1, const int set2) {
     sets[set1].merge(sets[set2]);
-    print_set();
+    // print_set();
     std::cout << '\n';
     sets.erase(sets.begin() + set2);
 }
