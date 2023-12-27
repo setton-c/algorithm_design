@@ -46,11 +46,13 @@ public:
     void bellman_ford(const char start);
     void print_graph();
     void print_all_edge();
+    void print_shortest_path(const char destination, const char start);
 
 private:
     std::unordered_map<char, std::list<std::pair<char, int>>> adjacency_list;
     std::vector<std::pair<char, std::pair<char, int>>> all_edges;
     std::unordered_set<char> visited;
+    std::unordered_map<char, int> previous;
     size_t vert_count;
     bool is_directed;
 };

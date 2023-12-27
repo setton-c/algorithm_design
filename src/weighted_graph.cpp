@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <iostream>
 #include <queue>
+#include <stack>
 
 weighted_graph::weighted_graph(const bool directed) : is_directed(directed) {}
 
@@ -95,7 +96,32 @@ void weighted_graph::prim(const char start) {
     }
 }
 
+void weighted_graph::print_shortest_path(
+    const char destination,
+    const char start
+) {
+    std::cout << "Path to " << destination << ": ";
+
+    std::stack<char> pathStack;
+    char current = destination;
+
+    while (previous.find(current) != previous.end()) {
+        pathStack.push(current);
+        current = previous[current];
+    }
+
+    // Print the start vertex
+    std::cout << start;
+
+    // Print the rest of the path
+    while (!pathStack.empty()) {
+        std::cout << " -> " << pathStack.top();
+        pathStack.pop();
+    }
+}
+
 void weighted_graph::dijkstra(const char start) {
+    previous.clear();
     visited.clear();
     std::unordered_map<char, int> distance;
     distance[start] = 0;
@@ -128,13 +154,15 @@ void weighted_graph::dijkstra(const char start) {
             if (distance.find(neighbour) == distance.end() ||
                 new_distance < distance[neighbour]) {
                 distance[neighbour] = new_distance;
+                previous[neighbour] = current_vert;
                 pq.push({new_distance, neighbour});
             }
         }
     }
     std::cout << "From: " << start << '\n';
-    for(const auto& edge : distance) {
-        std::cout << edge.first << ": " << edge.second << '\n';
+    for (const auto& edge : distance) {
+        print_shortest_path(edge.first, start);
+        std::cout << " Sum: " << edge.second << '\n';
     }
 }
 
