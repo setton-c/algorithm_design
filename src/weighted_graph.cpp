@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <iostream>
+#include <limits>
 #include <queue>
 #include <stack>
 
@@ -87,6 +88,7 @@ void weighted_graph::prim(const char start) {
         }
         // if not we mark it as visited
         visited.insert(dest);
+        std::cout << "***" << dest << "***\n\n";
         // add it to the MST
         std::cout << src << " to " << dest << " weight: " << weight << '\n';
         // and push all its neighbours to the pq
@@ -139,26 +141,43 @@ void weighted_graph::dijkstra(const char start) {
 
         char current_vert = current.second;
         int current_distance = current.first;
+        std::cout << "current_vert: " << current_vert << std::endl;
+        std::cout << "current_distance: " << current_distance << std::endl;
 
         if (visited.find(current_vert) != visited.end()) {
+            std::cout << current_vert << " already visited, skipping" << std::endl << std::endl;
             continue;
         }
 
         visited.insert(current_vert);
+        std::cout << "Visited: " << current_vert << std::endl;
 
         for (const auto& edge : adjacency_list[current_vert]) {
             char neighbour = edge.first;
             int neighbour_distance = edge.second;
             int new_distance = current_distance + neighbour_distance;
 
+            std::cout << "\tneighbour: " << neighbour << std::endl;
+            std::cout << "\tneighbour_distance: " << neighbour_distance << std::endl;
+            std::cout << "\tnew_distance: " << new_distance << std::endl;
+
             if (distance.find(neighbour) == distance.end() ||
                 new_distance < distance[neighbour]) {
+                
                 distance[neighbour] = new_distance;
+                std::cout<< "\t\tdistance[" << neighbour << "]: " << new_distance << std::endl;
                 previous[neighbour] = current_vert;
+                std::cout<< "\t\tprevious[" << neighbour << "]: " << current_vert << std::endl;
                 pq.push({new_distance, neighbour});
+                std::cout << "\t\tPQ pushed: " << "(" << new_distance << ", " << neighbour << ")"<< std::endl;
             }
         }
     }
+    std::cout << std::endl; 
+    for(const auto& edge : previous) {
+        std::cout << edge.first << ": " << (char)edge.second << std::endl;
+    }
+    
     std::cout << "From: " << start << '\n';
     for (const auto& edge : distance) {
         print_shortest_path(edge.first, start);
@@ -166,11 +185,81 @@ void weighted_graph::dijkstra(const char start) {
     }
 }
 
+void weighted_graph::bellman_ford(const char start) {
+    previous.clear();
+    std::unordered_map<char, int> distance;
+
+    for(const auto& edge : adjacency_list) {
+        distance[edge.first] = std::numeric_limits<int>::max();
+    }
+    distance[start] = 0;
+
+    for(int i = 0; i < vert_count-1; i++) {
+        for(const auto& adj_list : adjacency_list) {
+            const char current = adj_list.first;
+            
+            for(const auto& edge : adj_list.second) {
+                const char neighbour = edge.first; 
+                const int neighbour_dist = edge.second;
+                const int new_distance = distance[current] + neighbour_dist;
+                
+                if (distance[current] != std::numeric_limits<int>::max() && 
+                        new_distance < distance[neighbour]) {
+                    
+                    distance[neighbour] = new_distance;
+                    previous[neighbour] = current;
+                }
+
+            }
+        }
+    }
+
+    for(int i = 0; i < vert_count-1; i++) {
+        for(const auto& adj_list : adjacency_list) {
+            const char current = adj_list.first;
+
+            for(const auto& edge : adj_list.second) {
+                const char neighbour = edge.first; 
+                const int neighbour_dist = edge.second;
+                const int new_distance = distance[current] + neighbour_dist;
+
+                if (distance[current] != std::numeric_limits<int>::max() && 
+                        new_distance < distance[neighbour]) {
+                    distance[neighbour] = std::numeric_limits<int>::min();
+                }
+
+            }
+        }
+    }
+    
+    // for(const auto& edge : previous) {
+    //     std::cout << edge.first << ": " << (char)edge.second << std::endl;
+    // }
+    
+    std::cout << "From: " << start << '\n';
+    for (const auto& edge : distance) {
+        if (edge.second != std::numeric_limits<int>::min()) {
+            print_shortest_path(edge.first, start);
+            std::cout << " Sum: " << edge.second << '\n';
+        } else {
+            std::cout << edge.first << ": No path (negative cycle)\n";
+        }
+    }
+}
+
+void weighted_graph::fill_matrix(std::map<char, std::map<char, int>> matrix) {
+    for(const auto edge : adjacency_list) {
+        for(const auto neighbours : edge.second) {
+            matrix[edge.first][neighbours.second];
+        }
+    }
+}
+
 void weighted_graph::print_graph() {
     for (const auto& el : adjacency_list) {
         std::cout << el.first << ": ";
         for (const auto& pr : el.second) {
-            printf("(%c, %d), ", pr.first, pr.second);
+            printf("(%c, %d) ", pr.first, pr.second);
         }
         std::cout << '\n';
     }

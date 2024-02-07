@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <list>
+#include <map>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -46,6 +47,7 @@ public:
     void bellman_ford(const char start);
     void print_graph();
     void print_all_edge();
+    void fill_matrix(std::map<char, std::map<char, int>> matrix);
     void print_shortest_path(const char destination, const char start);
 
 private:
