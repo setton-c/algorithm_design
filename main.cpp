@@ -51,13 +51,24 @@ int main() {
     g.add_edge('1', '6', 60);
     g.add_edge('6', '7', -50);
     g.add_edge('7', '8', -10);
+
+    // std::map<char, std::map<char, int>> matrix;
+    // g.fill_matrix(matrix);
     
 
     g.print_graph();
     // g.kruskal();
     // g.prim('a');
     // g.dijkstra('a');
-    g.bellman_ford('0');
+    // g.bellman_ford('0');
+
+    // for(int i = 48; i <= 57; i++) {
+    //     const char point = (char)i;
+    //     std::cout << point << '\n';
+    //     g.bellman_ford(point);
+    //     std::cout << "------------------------------------------------------\n";
+    // }
+    // g.floyd_warshall();
     // g.print_all_edge();
     // g.print_graph();
 }

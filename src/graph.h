@@ -47,7 +47,9 @@ public:
     void bellman_ford(const char start);
     void print_graph();
     void print_all_edge();
-    void fill_matrix(std::map<char, std::map<char, int>> matrix);
+    void fill_matrix(std::map<char, std::map<char, int>>& matrix);
+    void print_matrix(std::map<char, std::map<char, int>>& matrix);
+    void floyd_warshall(); 
     void print_shortest_path(const char destination, const char start);
 
 private:
