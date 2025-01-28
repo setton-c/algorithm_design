@@ -247,66 +247,48 @@ void weighted_graph::bellman_ford(const char start) {
     }
 }
 
-// TODO: finish the implementation
 void weighted_graph::floyd_warshall() {
     std::map<char, std::map<char, int>> matrix;
+    init_all_vertices();
     fill_matrix(matrix);
 
-    for (const auto& k : adjacency_list) {
-        for (const auto& i : adjacency_list) {
-            for (const auto& j : adjacency_list) {
-                // Update distance if a shorter path is found
-                matrix[i.first][j.first] = std::min(
-                        matrix[i.first][j.first],
-                        matrix[i.first][k.first] + matrix[k.first][j.first]
-                        );
+    for (const auto& k : this->all_vertices) {
+        for (const auto& i : this->all_vertices) {
+            for (const auto& j : this->all_vertices) {
+                matrix[i][j] = std::min(
+                        matrix[i][j],
+                        matrix[i][k] + matrix[k][j]
+                );
             }
         }
     }
-    
+
     print_matrix(matrix);
-    
 }
 
-// void weighted_graph::fill_matrix(std::map<char, std::map<char, int>>& matrix) {
-//     for(const auto edge : adjacency_list) {
-//         for(const auto neighbours : edge.second) {
-//             matrix[edge.first][neighbours.first] = neighbours.second;
-//         }
-//     }
-//
-//     for(const auto edge : matrix) {
-//         std::cout << edge.first << ": {\n";
-//         for(const auto neighbours : edge.second) {
-//             std::cout << "\t" << neighbours.first << ": " << neighbours.second << '\n';
-//         }
-//         std::cout << "}\n";
-//     }
-// }
-//
 void weighted_graph::fill_matrix(std::map<char, std::map<char, int>>& matrix) {
-    for (const auto& vertex : adjacency_list) {
-        matrix[vertex.first] = std::map<char, int>();
-        for (const auto& neighbor : vertex.second) {
-            matrix[vertex.first][neighbor.first] = neighbor.second;
-        }
-    }
-
-    for (const auto& vertex : adjacency_list) {
-        for (const auto& neighbor : vertex.second) {
-            if (matrix[vertex.first][neighbor.first] == 0) {
-                // Set self-loop to 0 if not already set
-                matrix[vertex.first][neighbor.first] = 0;
+    for (const auto& src : this->all_vertices) {
+        for (const auto& dest : this->all_vertices) {
+            if (src == dest) {
+                matrix[src][dest] = 0;
+            } else {
+                matrix[src][dest] = 9999;
             }
         }
     }
 
-    // Set infinity for missing edges
-    for (const auto& vertex : adjacency_list) {
-        for (const auto& other : adjacency_list) {
-            if (vertex.first != other.first && matrix[other.first][vertex.first] == 0) {
-                matrix[other.first][vertex.first] = 9999;
-            }
+    for (const auto& src : adjacency_list) {
+        for (const auto& edge : src.second) {
+            matrix[src.first][edge.first] = edge.second;
+        }
+    }
+}
+
+void weighted_graph::init_all_vertices() {
+    for (const auto& src : adjacency_list) {
+        all_vertices.insert(src.first);
+        for (const auto& edge : src.second) {
+            all_vertices.insert(edge.first);
         }
     }
 }

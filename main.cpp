@@ -12,12 +12,13 @@ int main() {
     // graph.Kosaraju_SCC();
 
     weighted_graph graph(true);
-    graph_4(graph);
+    graph_3(graph);
 
     std::cout << "Graph:" << std::endl;
     graph.print_graph();
     
-    graph.bellman_ford('0');
+    // graph.bellman_ford('0');
+    graph.floyd_warshall();
 
     // std::map<char, std::map<char, int>> matrix;
     // g.fill_matrix(matrix);

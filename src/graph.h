@@ -56,11 +56,13 @@ public:
     void print_matrix(std::map<char, std::map<char, int>>& matrix);
     void floyd_warshall(); 
     void print_shortest_path(const char destination, const char start);
+    void init_all_vertices();
 
 private:
     std::unordered_map<char, std::list<std::pair<char, int>>> adjacency_list;
     std::vector<std::pair<char, std::pair<char, int>>> all_edges;
     std::unordered_set<char> visited;
+    std::unordered_set<char> all_vertices;
     std::unordered_map<char, int> previous;
     size_t vert_count;
     bool is_directed;

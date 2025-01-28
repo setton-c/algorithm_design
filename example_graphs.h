@@ -28,7 +28,7 @@ inline void graph_3(weighted_graph& g) {
     g.add_edge('b', 'e', 3);
     g.add_edge('c', 'd', 4);
     g.add_edge('c', 'e', 5);
-    g.add_edge('e', 'd', -5);
+    // g.add_edge('e', 'd', -5);
 }
 
 inline void graph_4(weighted_graph& g) {
