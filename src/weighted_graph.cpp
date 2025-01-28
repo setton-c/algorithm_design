@@ -17,7 +17,7 @@ void weighted_graph::add_edge(
 
     adjacency_list[src].push_back(edge);
     all_edges.push_back({src, edge});
-    vert_count++;
+    vert_count = adjacency_list.size();
 
     if (!is_directed) {
         adjacency_list[dest].push_back(std::make_pair(src, weight));

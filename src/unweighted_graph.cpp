@@ -13,7 +13,7 @@ void unweighted_graph::add_edge(const char src, const char dest) {
     }
 
     adjacency_list[src].push_back(dest);
-    vert_count++;
+    vert_count = adjacency_list.size();
 }
 
 void unweighted_graph::DFS(const char start, bool scc, bool keep_visited) {
