@@ -4,6 +4,7 @@
 #include <iostream>
 #include <list>
 #include <map>
+#include <stack>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -26,13 +27,17 @@ class unweighted_graph {
 public:
     unweighted_graph(const bool directed);
     void add_edge(const char src, const char dest);
-    void DFS(const char start);
+    void DFS(const char start, bool scc=false, bool keep_visited=false);
     void BFS(const char start);
+    void Kosaraju_SCC();
     void print_graph();
+    void transpose_graph();
 
 private:
     std::unordered_map<char, std::list<char>> adjacency_list;
+    std::unordered_map<char, std::list<char>> adjacency_list_transposed;
     std::unordered_set<char> visited;
+    std::stack<char> scc_order;
     size_t vert_count;
     bool is_directed;
 };

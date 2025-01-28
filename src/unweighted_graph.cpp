@@ -16,8 +16,13 @@ void unweighted_graph::add_edge(const char src, const char dest) {
     vert_count++;
 }
 
-void unweighted_graph::DFS(const char start) {
-    visited.clear();
+void unweighted_graph::DFS(const char start, bool scc, bool keep_visited) {
+    if (!keep_visited){
+        visited.clear();
+    }
+    
+    std::unordered_map<char, std::list<char>>* Graph = 
+        scc ? &(this->adjacency_list_transposed) : &(this->adjacency_list);
 
     std::stack<char> neighbours;
     neighbours.push(start);
@@ -31,15 +36,20 @@ void unweighted_graph::DFS(const char start) {
         }
 
         visited.insert(current);
-        std::cout << current << " ";
+        if (scc) {
+            std::cout << current << " ";
+        }
 
-        for (const char& neighbour : adjacency_list[current]) {
+        for (const char& neighbour : (*Graph)[current]) {
             if (visited.find(neighbour) == visited.end()) {
                 neighbours.push(neighbour);
             }
         }
+        
+        if (!scc) {
+            this->scc_order.push(current);
+        }
     }
-    std::cout << '\n';
 }
 
 void unweighted_graph::BFS(const char start) {
@@ -68,6 +78,30 @@ void unweighted_graph::BFS(const char start) {
     std::cout << '\n';
 }
 
+void unweighted_graph::Kosaraju_SCC() {
+    visited.clear();
+
+    for (auto& vertex : adjacency_list) {
+        if (visited.find(vertex.first) == visited.end()) {
+            this->DFS(vertex.first, false, true);
+        }
+    }
+
+    this->transpose_graph();
+
+    visited.clear();
+    while(!this->scc_order.empty()) {
+        const char current = scc_order.top();
+        scc_order.pop();
+
+        if(visited.find(current) == visited.end()) {
+            std::cout << "SCC: ";
+            DFS(current, true, true);
+            std::cout << "\n";
+        }
+    }
+}
+
 void unweighted_graph::print_graph() {
     std::cout << "Vertex count: " << vert_count << '\n';
     // Type: const std::pair<const char, const std::list<char>> el
@@ -80,3 +114,14 @@ void unweighted_graph::print_graph() {
         std::cout << '\n';
     }
 }
+
+void unweighted_graph::transpose_graph() {
+    this->adjacency_list_transposed.clear();
+
+    for(auto& vertex : this->adjacency_list) {
+        for(const char& neighbour : vertex.second) {
+            adjacency_list_transposed[neighbour].push_back(vertex.first);
+        }
+    }
+}
+
