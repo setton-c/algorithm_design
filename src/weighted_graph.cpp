@@ -184,65 +184,65 @@ void weighted_graph::dijkstra(const char start) {
         std::cout << " Sum: " << edge.second << '\n';
     }
 }
-// TODO: Fix the implementation
+
+/// TODO: Improve the Bellman-Ford implementation
 void weighted_graph::bellman_ford(const char start) {
     previous.clear();
     std::unordered_map<char, int> distance;
 
-    for(const auto& edge : adjacency_list) {
+    for (const auto& edge : adjacency_list) {
         distance[edge.first] = std::numeric_limits<int>::max();
     }
     distance[start] = 0;
 
-    for(int i = 0; i < vert_count-1; i++) {
-        for(const auto& adj_list : adjacency_list) {
+    for (size_t i = 0; i < vert_count - 1; ++i) {
+        for (const auto& adj_list : adjacency_list) {
             const char current = adj_list.first;
-            
-            for(const auto& edge : adj_list.second) {
-                const char neighbour = edge.first; 
-                const int neighbour_dist = edge.second;
-                const int new_distance = distance[current] + neighbour_dist;
-                
-                if (distance[current] != std::numeric_limits<int>::max() && 
-                        new_distance < distance[neighbour]) {
-                    
-                    distance[neighbour] = new_distance;
-                    previous[neighbour] = current;
-                }
 
+            for (const auto& edge : adj_list.second) {
+                const char neighbor = edge.first;
+                const int weight = edge.second;
+
+                if (distance[current] != std::numeric_limits<int>::max() &&
+                    distance[current] + weight < distance[neighbor]) {
+                    distance[neighbor] = distance[current] + weight;
+                    previous[neighbor] = current;
+                }
             }
         }
     }
 
-    for(int i = 0; i < vert_count-1; i++) {
-        for(const auto& adj_list : adjacency_list) {
+    std::unordered_set<char> negative_cycle_nodes;
+    for (size_t i = 0; i < vert_count; ++i) {
+        for (const auto& adj_list : adjacency_list) {
             const char current = adj_list.first;
 
-            for(const auto& edge : adj_list.second) {
-                const char neighbour = edge.first; 
-                const int neighbour_dist = edge.second;
-                const int new_distance = distance[current] + neighbour_dist;
+            for (const auto& edge : adj_list.second) {
+                const char neighbor = edge.first;
+                const int weight = edge.second;
 
-                if (distance[current] != std::numeric_limits<int>::max() && 
-                        new_distance < distance[neighbour]) {
-                    distance[neighbour] = std::numeric_limits<int>::min();
+                if (distance[current] != std::numeric_limits<int>::max() &&
+                        distance[current] + weight < distance[neighbor]) {
+                    negative_cycle_nodes.insert(neighbor);
                 }
 
+                if (negative_cycle_nodes.count(current)) {
+                    negative_cycle_nodes.insert(neighbor);
+                }
             }
         }
     }
-    
-    // for(const auto& edge : previous) {
-    //     std::cout << edge.first << ": " << (char)edge.second << std::endl;
-    // }
-    
+
     std::cout << "From: " << start << '\n';
     for (const auto& edge : distance) {
-        if (edge.second != std::numeric_limits<int>::min()) {
-            print_shortest_path(edge.first, start);
-            std::cout << " Sum: " << edge.second << '\n';
+        const char node = edge.first;
+        if (negative_cycle_nodes.count(node)) {
+            std::cout << node << ": No path (negative cycle)\n";
+        } else if (edge.second == std::numeric_limits<int>::max()) {
+            std::cout << node << ": No path\n";
         } else {
-            std::cout << edge.first << ": No path (negative cycle)\n";
+            print_shortest_path(node, start);
+            std::cout << " Sum: " << edge.second << '\n';
         }
     }
 }

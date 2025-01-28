@@ -2,14 +2,22 @@
 #include "example_graphs.h"
 
 int main() {
-    unweighted_graph graph(true);
-    graph_5(graph);
-    
+    // unweighted_graph graph(true);
+    // graph_5(graph);
+    // 
+    // std::cout << "Graph:" << std::endl;
+    // graph.print_graph();
+    //
+    // std::cout << "\nStrongly Connected Components (Kosaraju's Algorithm):\n";
+    // graph.Kosaraju_SCC();
+
+    weighted_graph graph(true);
+    graph_4(graph);
+
     std::cout << "Graph:" << std::endl;
     graph.print_graph();
-
-    std::cout << "\nStrongly Connected Components (Kosaraju's Algorithm):\n";
-    graph.Kosaraju_SCC();
+    
+    graph.bellman_ford('0');
 
     // std::map<char, std::map<char, int>> matrix;
     // g.fill_matrix(matrix);
